@@ -107,7 +107,7 @@ else:
         fcount = extract('{}'.format(filename), 'output')
         lcount = 0
         for j in range(fcount):
-            print("Generating ascii output for frame {}".format(j))
+            print("Generating ascii output for frame {}/{}".format(j, fcount))
             html = get_html(j, static, width)
             parsed_html = BeautifulSoup(html, 'html.parser')
             if not lcount:
