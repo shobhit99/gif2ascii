@@ -2,6 +2,7 @@
 
 <div>
 <a href="https://imgur.com/a/UwURStn"><img src="https://image.prntscr.com/image/e6jd-3RMRWuy7GNI2DREgw.png"></a>
+  <a href="https://imgur.com/a/UwURStn">Watch Video</a>
 </div>
 
 
