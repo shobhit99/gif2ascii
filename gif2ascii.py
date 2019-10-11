@@ -63,7 +63,7 @@ usage = '''
     python gif2ascii.py -f image.jpg -w 100 --static
 
 	'''
-parser = argparse.ArgumentParser(description="Virtual Box Script", epilog=usage, formatter_class=argparse.RawDescriptionHelpFormatter)
+parser = argparse.ArgumentParser(description="Gif to Ascii", epilog=usage, formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument("-f", help="input file", type=str)
 parser.add_argument("-w", help="width for output", type=str, default=50)
 args = parser.parse_args()
