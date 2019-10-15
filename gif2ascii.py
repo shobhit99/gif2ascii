@@ -1,6 +1,7 @@
 import textwrap
 import re
 import os
+import inspect
 import sys
 import time
 from bs4 import BeautifulSoup
@@ -16,6 +17,10 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 op_list = []
 op_buffer = ""
+bashFile = "/etc/bash.bashrc"
+keyword = "gif2ascii"
+bashFileBackup = "{}__{}".format(bashFile, keyword)
+asciifilepath = os.path.abspath("./filename_ascii")
 
 
 def hex_to_rgb(value):
@@ -62,14 +67,20 @@ usage = '''
     For Static images
     python gif2ascii.py -f image.jpg -w 100 --static
 
+    To show when Bash terminal start (Linux)
+    sudo python gif2ascii.py -f image.jpg -w 60 -b 1
+    sudo python gif2ascii.py -f image.gif -w 60 -b 1
+
 	'''
 parser = argparse.ArgumentParser(description="Gif to Ascii", epilog=usage, formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument("-f", help="input file", type=str)
 parser.add_argument("-w", help="width for output", type=str, default=50)
+parser.add_argument("-b", help="write for bash", type=str, default=0)
 args = parser.parse_args()
 
 filename = args.f
 width = args.w
+writebashmode = args.b
 static = True
 
 if len(sys.argv) == 1:
@@ -124,14 +135,69 @@ else:
             op_buffer = ""
             clear(width, absolute=0)
 
-if static:
-    sys.stdout.write(op_buffer)
+def writeBlob(static, filename, op_buffer):
+    global asciifilepath
+
+    if static:
+        with open(asciifilepath, mode="w+", encoding="utf8") as f:
+            f.write("frames=1__{}__\n".format(keyword))
+            f.write("width={}__{}__\n".format(width, keyword))
+            f.write("lcount={}__{}__\n".format(lcount, keyword))
+            f.write(op_buffer)
+            f.write("\n")
+    else:
+        with open(asciifilepath, mode="w+", encoding="utf8") as f:
+            f.write("frames={}__{}__\n".format(len(op_buffer), keyword))
+            f.write("width={}__{}__\n".format(width, keyword))
+            f.write("lcount={}__{}__\n".format(lcount, keyword))
+            for item in op_buffer:
+                f.write(item)
+                f.write("__{}__".format(keyword))
+            f.write("\n")
+
+    # To Backup
+    if os.path.exists(bashFileBackup):
+        pass
+    else:
+        shutil.copy(bashFile, bashFileBackup)
+
+    bashrc = ""
+    with open(bashFile, mode="r") as rfile:
+        bashrc = rfile.read().split("\n")
+
+    currentframe = inspect.currentframe()
+    # Script filename (usually with path)
+    scriptFile = inspect.getfile(currentframe)
+    # Script directory
+    scriptDir = os.path.dirname(os.path.abspath(scriptFile))
+
+    with open(bashFile, mode="w") as wfile:
+        for line in bashrc:
+            if line.find("gif2ascii_player.py") == -1:
+                wfile.write("{}\n".format(line))
+        command = "{} {}/{} -p 1 -r {}".format(
+            sys.executable,
+            scriptDir,
+            "gif2ascii_player.py",
+            asciifilepath
+            )
+        wfile.write(command)
+        print("{}\n is appended to {}".format(command, bashFile))
+
+if writebashmode == "1":
+    if static:
+        writeBlob(static, temp_name[0], op_buffer)
+    else:
+        writeBlob(static, temp_name[0], op_list)
 else:
-    try:
-        while True:
-            for i in op_list:
-                sys.stdout.write(i)
-                time.sleep(0.08)
-                clear(width, absolute=lcount-1)
-    except KeyboardInterrupt:
-        print("\x1b[0m\n")
+    if static:
+        sys.stdout.write(op_buffer)
+    else:
+        try:
+            while True:
+                for i in op_list:
+                    sys.stdout.write(i)
+                    time.sleep(0.08)
+                    clear(width, absolute=lcount-1)
+        except KeyboardInterrupt:
+            print("\x1b[0m\n")
