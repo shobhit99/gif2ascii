@@ -19,6 +19,9 @@ sudo apt-get install screenfetch
 python3.7 gif2ascii.py -f image.jpg -w 60 
 # Generates ascii for every frame ( takes time depending upon frame count)
 python3.7 gif2ascii.py -f image.gif -w 60
+# To show when Bash terminal start (Linux)
+sudo python gif2ascii.py -f image.jpg -w 60 -b 1
+sudo python gif2ascii.py -f image.gif -w 60 -b 1
 # Print help
 python3.7 gif2ascii.py -h
 ```
