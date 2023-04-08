@@ -10,12 +10,13 @@ from gif2ascii.clear import clear
 
 class GifAscii:
     
-    def __init__(self, file_name, width=80, chars=list('108BRES'), frame_delay=0.05, loop_gif=True, fit_terminal=False):
+    def __init__(self, file_name, width=80, chars=list('108BRES'), frame_delay=0.05, loop_gif=True, fit_terminal=False, screenfetch=False):
         self.file_name = file_name
         self.op_width = width
         self.chars = chars
         self.tsize = get_terminal_size()
         self.op_height = None
+        self.screenfetch = screenfetch
         if fit_terminal:
             self.op_width = self.tsize.columns
             self.op_height = self.tsize.lines
@@ -50,7 +51,7 @@ class GifAscii:
                         r, g, b = self.get_rgb(pixel, image)
                         op_buffer += '\x1b[38;2;{};{};{}m'.format(r, g, b)
                         op_buffer += str(self.chars[random.randint(0, len(self.chars)-1)])
-                    op_buffer += '\n'
+                    op_buffer += '%s\n' if self.screenfetch else '\n'
             return op_buffer
     
     def _get_gif_frame_ansi(self, image):
