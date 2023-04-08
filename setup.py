@@ -7,7 +7,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = '0.1.3'
+VERSION = '0.1.4'
 DESCRIPTION = 'Gif to ASCII'
 LONG_DESCRIPTION = 'Converts Gifs and Images to Colorful ASCII'
 
@@ -23,6 +23,9 @@ setup(
     packages=find_packages(),
     install_requires=['Pillow', 'argparse'],
     keywords=['python', 'ascii gif', 'terminal gif', 'ascii art', 'terminal art'],
+    project_urls={
+        'Source': "https://github.com/shobhit99/gif2ascii/"
+    },
     classifiers=[
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
