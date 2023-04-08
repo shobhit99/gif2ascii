@@ -1,5 +1,10 @@
 ## gif2ascii
 
+### Installation
+```bash
+pip install gif2ascii
+```
+
 
 https://user-images.githubusercontent.com/38807205/230733470-5491dd82-5e36-4f73-b553-a38a167837ec.mov
 
